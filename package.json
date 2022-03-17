@@ -1,0 +1,30 @@
+{
+  "name": "vuplex-bridge",
+  "version": "0.1.0",
+  "description": "",
+  "private": true,
+  "repository": "netless-io/vuplex-bridge",
+  "keywords": [
+    "vuplex",
+    "unity",
+    "webview",
+    "white-web-sdk"
+  ],
+  "license": "MIT",
+  "scripts": {
+    "build": "esbuild-dev scripts/build.ts"
+  },
+  "dependencies": {
+    "@netless/fastboard": "0.3.2-canary.1",
+    "@netless/window-manager": "^0.4.18",
+    "core-js": "^3.21.1",
+    "white-web-sdk": "^2.16.10"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.17.8",
+    "@babel/preset-env": "^7.16.11",
+    "@hyrious/esbuild-dev": "^0.7.5",
+    "@types/babel__core": "^7.1.19",
+    "esbuild": "^0.14.28"
+  }
+}
