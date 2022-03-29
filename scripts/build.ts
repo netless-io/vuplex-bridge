@@ -2,6 +2,7 @@ import { readFile, copyFile } from "fs/promises";
 import esbuild, { Plugin } from "esbuild";
 import babel from "@babel/core";
 import { dependencies } from "../package.json";
+import { relative } from "path";
 
 const config = await babel.loadPartialConfigAsync({
   configFile: false,
@@ -33,7 +34,7 @@ const babel_plugin: Plugin = {
       let code = await readFile(args.path, "utf-8");
       ({ code } = await esbuild.transform(code, {
         loader: "ts",
-        sourcefile: args.path,
+        sourcefile: relative(process.cwd(), args.path),
         sourcemap: "inline",
       }));
       ({ code } = await babel.transformAsync(code, config.options));
