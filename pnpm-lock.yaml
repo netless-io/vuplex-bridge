@@ -4,7 +4,7 @@ specifiers:
   '@babel/core': ^7.17.8
   '@babel/preset-env': ^7.16.11
   '@hyrious/esbuild-dev': ^0.7.5
-  '@netless/fastboard': 0.3.2-canary.1
+  '@netless/fastboard': 0.3.2-canary.2
   '@netless/window-manager': ^0.4.18
   '@types/babel__core': ^7.1.19
   core-js: ^3.21.1
@@ -12,7 +12,7 @@ specifiers:
   white-web-sdk: ^2.16.10
 
 dependencies:
-  '@netless/fastboard': 0.3.2-canary.1_d4715ca322a62d0a5629416fec180001
+  '@netless/fastboard': 0.3.2-canary.2_d4715ca322a62d0a5629416fec180001
   '@netless/window-manager': 0.4.18_white-web-sdk@2.16.10
   core-js: 3.21.1
   white-web-sdk: 2.16.10
@@ -1195,8 +1195,8 @@ packages:
     resolution: {integrity: sha512-7NzsJrba0R/mq/l10SkIZQwbrNVJyPxZYrjK6xL3Ts732iWAVuS2UB0u3s6iGeUVcqV39A679yva8APWRl4M0A==}
     dev: false
 
-  /@netless/fastboard-core/0.3.2-canary.1_d4715ca322a62d0a5629416fec180001:
-    resolution: {integrity: sha512-UMmhuxSLLl3GvxZyM/qye0YVwsMZ0RZUayEVFylPsTD90wSyVlNdy55bZUnUVLVAKO34j63DsTSnUWoXw33t7g==}
+  /@netless/fastboard-core/0.3.2-canary.2_d4715ca322a62d0a5629416fec180001:
+    resolution: {integrity: sha512-QlB/PgrXCc8kZBKSVbndfp2dvNDLttItYsLHH3mks8/HF14Dx3uuS4cA1m1HDbNkjij4esdi0rpgv/sQHjHP4A==}
     peerDependencies:
       '@netless/window-manager': '>=0.4.0'
       white-web-sdk: '>=2.16.0'
@@ -1206,20 +1206,20 @@ packages:
       white-web-sdk: 2.16.10
     dev: false
 
-  /@netless/fastboard-ui/0.3.2-canary.1_cc7d09957d14dd515e5839fe0bf867be:
-    resolution: {integrity: sha512-FgRAOeI+k35bVisN8Av73gooNEDbKvDUeEX4h6w9qp1rmoKm7lSIJv1/RcjuKCuxG00/0Dg10F+1BKEvOgFh+g==}
+  /@netless/fastboard-ui/0.3.2-canary.2_438544ea40e6f6a54080f74d1f219a41:
+    resolution: {integrity: sha512-aGuCAtUkGQcyYDkx3BZWC7UU/81kxy7sLpLkc0KTkTmho0TldGtHdPwpOpxPVPqGKgE00A4dxXx6QQkS37s6CQ==}
     peerDependencies:
-      '@netless/fastboard-core': 0.3.2-canary.1
+      '@netless/fastboard-core': 0.3.2-canary.2
     dependencies:
-      '@netless/fastboard-core': 0.3.2-canary.1_d4715ca322a62d0a5629416fec180001
+      '@netless/fastboard-core': 0.3.2-canary.2_d4715ca322a62d0a5629416fec180001
       tippy.js: 6.3.7
     dev: false
 
-  /@netless/fastboard/0.3.2-canary.1_d4715ca322a62d0a5629416fec180001:
-    resolution: {integrity: sha512-ozqC/5hqjmAW3p1aaY8IjYwUBJh1ygQrZmHcKUSYgTOQpU3uR9IHd86hUvwHvPJ9G1zBn71N7TC0LonfrknVUw==}
+  /@netless/fastboard/0.3.2-canary.2_d4715ca322a62d0a5629416fec180001:
+    resolution: {integrity: sha512-liq4xD1OSNNKWI323I/oG6B3fYGx5Jx+VK1yAAp5ANOs92Hy8AyHKrKusqvU5jWkRYrcIgj6DqAhcxH0OK5czA==}
     dependencies:
-      '@netless/fastboard-core': 0.3.2-canary.1_d4715ca322a62d0a5629416fec180001
-      '@netless/fastboard-ui': 0.3.2-canary.1_cc7d09957d14dd515e5839fe0bf867be
+      '@netless/fastboard-core': 0.3.2-canary.2_d4715ca322a62d0a5629416fec180001
+      '@netless/fastboard-ui': 0.3.2-canary.2_438544ea40e6f6a54080f74d1f219a41
     transitivePeerDependencies:
       - '@netless/window-manager'
       - white-web-sdk

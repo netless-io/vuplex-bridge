@@ -12,10 +12,11 @@
   ],
   "license": "MIT",
   "scripts": {
-    "build": "esbuild-dev scripts/build.ts"
+    "build": "esbuild-dev scripts/build.ts",
+    "cs": "ruby scripts/cs.rb"
   },
   "dependencies": {
-    "@netless/fastboard": "0.3.2-canary.1",
+    "@netless/fastboard": "0.3.2-canary.2",
     "@netless/window-manager": "^0.4.18",
     "core-js": "^3.21.1",
     "white-web-sdk": "^2.16.10"
