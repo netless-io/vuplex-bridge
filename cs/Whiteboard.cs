@@ -11,6 +11,12 @@ namespace Whiteboard {
         public string error;
     }
 
+    [Serializable]
+    public class BooleanMessage : BridgeMessage {
+        public bool value;
+    }
+
+
     public class URLBuilder {
         public string Url;
         public URLSearchParams query;
@@ -122,23 +128,28 @@ namespace Whiteboard {
         public BaseWebViewPrefab webViewPrefab;
 
         private TaskCompletionSource<bool> readySource;
+        private TaskCompletionSource<bool> writableSource;
 
         /// <summary>
         /// Fire on whiteboard initialized successfully.
         /// </summary>
-        public event EventHandler OnReady;
+        public event EventHandler OnReady = delegate { };
 
         /// <summary>
         /// Fire on whiteboard throw error.
         /// </summary>
-        public event EventHandler<string> OnError;
+        public event EventHandler<string> OnError = delegate { };
+
+        /// <summary>
+        /// Fired on querying the whiteboard writable value.
+        /// </summary>
+        public event EventHandler<bool> OnWritableChanged = delegate { };
 
         /// <summary>
         /// Initiate a new Whiteboard Bridge.
         /// </summary>
         public Whiteboard(BaseWebViewPrefab prefab) {
             webViewPrefab = prefab;
-            webViewPrefab.WebView.MessageEmitted += WebView_MessageEmitted;
         }
 
         /// <summary>
@@ -157,13 +168,30 @@ namespace Whiteboard {
             ub.AppendQuery("roomToken", roomToken);
 
             webViewPrefab.WebView.LoadUrl(ub.ToString());
+            // prevent add twice
+            webViewPrefab.WebView.MessageEmitted -= WebView_MessageEmitted;
+            webViewPrefab.WebView.MessageEmitted += WebView_MessageEmitted;
 
             // await webviewPrefab.WebView.WaitForNextPageLoadToFinish();
 
             await readySource.Task;
         }
 
+        /// <summary>
+        /// bool writable = await whiteboard.GetWritable();
+        /// </summary>
+        public async Task<bool> GetWritable() {
+            writableSource = new TaskCompletionSource<bool>();
+
+            webViewPrefab.WebView.PostMessage(JsonUtility.ToJson(new BridgeMessage {
+                type = "whiteboard.writable"
+            }));
+
+            return await writableSource.Task;
+        }
+
         private void WebView_MessageEmitted(object sender, EventArgs<string> e) {
+            // Debug.Log(">>>> " + e.Value);
             if (e.Value.Contains("whiteboard.")) {
                 switch (BridgeMessage.ParseType(e.Value)) {
                     case "whiteboard.ready":
@@ -174,6 +202,11 @@ namespace Whiteboard {
                         string error = JsonUtility.FromJson<ErrorMessage>(e.Value).error;
                         OnError(this, error);
                         Debug.LogError(error);
+                        break;
+                    case "whiteboard.writable":
+                        bool value = JsonUtility.FromJson<BooleanMessage>(e.Value).value;
+                        writableSource.SetResult(value);
+                        OnWritableChanged(this, value);
                         break;
                     default:
                         Debug.Log("Received WebView Message: " + e.Value);

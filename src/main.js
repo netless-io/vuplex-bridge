@@ -1,12 +1,15 @@
 import { createFastboard, mount } from "@netless/fastboard";
 
+window.app = null;
+window.ui = null;
+
 const IPC = {
   // Send message to the controller (Unity or parent window).
-  postMessage(str) {
+  postMessage(msg) {
     if (typeof vuplex !== "undefined") {
-      vuplex.postMessage(str);
+      vuplex.postMessage(JSON.stringify(msg));
     } else {
-      parent.postMessage(str, "*");
+      parent.postMessage(JSON.stringify(msg), "*");
     }
   },
   // Get message from the controller.
@@ -19,12 +22,31 @@ const IPC = {
   },
 };
 
-const EVENTS = {
+const METHODS = {
   // Fired after joined room.
-  ready: () => ({ type: "whiteboard.ready" }),
+  ready: () => IPC.postMessage({ type: "whiteboard.ready" }),
+
   // Fired if any error occurs. (error: string)
-  error: error => ({ type: "whiteboard.error", error }),
+  error: error => IPC.postMessage({ type: "whiteboard.error", error }),
+
+  // Get whiteboard writable state.
+  writable: () => IPC.postMessage({ type: "whiteboard.writable", value: window.app.room.isWritable }),
 };
+
+function is_string(v) {
+  return typeof v === "string";
+}
+
+function handle({ type, ...args }) {
+  if (is_string(type) && type.startsWith("whiteboard.")) {
+    type = type.slice(11);
+    if (type in METHODS) {
+      METHODS[type](args);
+    } else {
+      console.warn(`Unknown method: ${type}`);
+    }
+  }
+}
 
 const REQUIRED_QUERY_PARAMS = ["appid", "region", "uid", "uuid", "roomToken"];
 function read_query_params() {
@@ -38,8 +60,10 @@ function read_query_params() {
   return Object.fromEntries(query.entries());
 }
 
-window.app = null;
-window.ui = null;
+function on_catch_error(err) {
+  console.error(err);
+  METHODS.error(err.message);
+}
 
 // Start from here.
 async function main() {
@@ -57,10 +81,23 @@ async function main() {
   });
   window.app = app;
   window.ui = mount(app, document.querySelector("#whiteboard"));
-  IPC.postMessage(EVENTS.ready());
+  METHODS.ready();
+  IPC.addEventListener("message", event => {
+    const data = event.data;
+    if (typeof data === "string") {
+      try {
+        handle(JSON.parse(data));
+      } catch (err) {
+        on_catch_error(err);
+      }
+    } else if (typeof data === "object" && data !== null) {
+      try {
+        handle(data);
+      } catch (err) {
+        on_catch_error(err);
+      }
+    }
+  });
 }
 
-main().catch(err => {
-  console.error(err);
-  IPC.postMessage(EVENTS.error(err.message));
-});
+main().catch(on_catch_error);
