@@ -16,6 +16,30 @@ namespace Whiteboard {
         public bool value;
     }
 
+    [Serializable]
+    public class MetaMessage : BridgeMessage {
+        public WhiteboardMeta value;
+    }
+
+    [Serializable]
+    public class WhiteboardMeta {
+        public string sessionUID;
+        public string uid;
+        public string roomUUID;
+        public string userPayload;
+    }
+
+    [Serializable]
+    public class MembersMessage : BridgeMessage {
+        public WhiteboardMember[] value;
+    }
+
+    [Serializable]
+    public class WhiteboardMember {
+        public string sessionUID;
+        public string uid;
+        public string userPayload;
+    }
 
     public class URLBuilder {
         public string Url;
@@ -129,6 +153,8 @@ namespace Whiteboard {
 
         private TaskCompletionSource<bool> readySource;
         private TaskCompletionSource<bool> writableSource;
+        private TaskCompletionSource<WhiteboardMember[]> membersSource;
+        private TaskCompletionSource<WhiteboardMeta> metaSource;
 
         /// <summary>
         /// Fire on whiteboard initialized successfully.
@@ -144,6 +170,16 @@ namespace Whiteboard {
         /// Fired on querying the whiteboard writable value.
         /// </summary>
         public event EventHandler<bool> OnWritableChanged = delegate { };
+
+        /// <summary>
+        /// Fired on querying the whiteboard members data.
+        /// </summary>
+        public event EventHandler<WhiteboardMember[]> OnMembersChanged = delegate { };
+
+        /// <summary>
+        /// Fired on querying the whiteboard meta data.
+        /// </summary>
+        public event EventHandler<WhiteboardMeta> OnMetaChanged = delegate { };
 
         /// <summary>
         /// Initiate a new Whiteboard Bridge.
@@ -180,14 +216,40 @@ namespace Whiteboard {
         /// <summary>
         /// bool writable = await whiteboard.GetWritable();
         /// </summary>
-        public async Task<bool> GetWritable() {
+        public Task<bool> GetWritable() {
             writableSource = new TaskCompletionSource<bool>();
 
             webViewPrefab.WebView.PostMessage(JsonUtility.ToJson(new BridgeMessage {
                 type = "whiteboard.writable"
             }));
 
-            return await writableSource.Task;
+            return writableSource.Task;
+        }
+
+        /// <summary>
+        /// var members = await whiteboard.GetMembers();
+        /// </summary>
+        public Task<WhiteboardMember[]> GetMembers() {
+            membersSource = new TaskCompletionSource<WhiteboardMember[]>();
+
+            webViewPrefab.WebView.PostMessage(JsonUtility.ToJson(new BridgeMessage {
+                type = "whiteboard.members"
+            }));
+
+            return membersSource.Task;
+        }
+
+        /// <summary>
+        /// var meta = await whiteboard.GetMeta();
+        /// </summary>
+        public Task<WhiteboardMeta> GetMeta() {
+            metaSource = new TaskCompletionSource<WhiteboardMeta>();
+
+            webViewPrefab.WebView.PostMessage(JsonUtility.ToJson(new BridgeMessage {
+                type = "whiteboard.meta"
+            }));
+
+            return metaSource.Task;
         }
 
         private void WebView_MessageEmitted(object sender, EventArgs<string> e) {
@@ -207,6 +269,16 @@ namespace Whiteboard {
                         bool value = JsonUtility.FromJson<BooleanMessage>(e.Value).value;
                         writableSource.SetResult(value);
                         OnWritableChanged(this, value);
+                        break;
+                    case "whiteboard.members":
+                        WhiteboardMember[] members = JsonUtility.FromJson<MembersMessage>(e.Value).value;
+                        membersSource.SetResult(members);
+                        OnMembersChanged(this, members);
+                        break;
+                    case "whiteboard.meta":
+                        WhiteboardMeta meta = JsonUtility.FromJson<MetaMessage>(e.Value).value;
+                        metaSource.SetResult(meta);
+                        OnMetaChanged(this, meta);
                         break;
                     default:
                         Debug.Log("Received WebView Message: " + e.Value);

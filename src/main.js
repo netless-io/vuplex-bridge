@@ -3,6 +3,29 @@ import { createFastboard, mount } from "@netless/fastboard";
 window.app = null;
 window.ui = null;
 
+function to_json(obj) {
+  return JSON.parse(JSON.stringify(obj));
+}
+
+var transform_member_state = ({ memberId, payload }) => ({
+  sessionUID: memberId,
+  uid: payload?.uid || "",
+  userPayload: JSON.stringify(payload),
+});
+
+function get_meta() {
+  const room = window.app.room;
+  const displayer = room;
+  const memberId = displayer.observerId;
+  const userPayload = displayer.state.roomMembers.find(member => member.memberId === memberId)?.payload;
+  return {
+    sessionUID: memberId,
+    uid: room?.uid || userPayload?.uid || "",
+    roomUUID: room?.uuid,
+    userPayload: JSON.stringify(userPayload),
+  };
+}
+
 const IPC = {
   // Send message to the controller (Unity or parent window).
   postMessage(msg) {
@@ -30,7 +53,25 @@ const METHODS = {
   error: error => IPC.postMessage({ type: "whiteboard.error", error }),
 
   // Get whiteboard writable state.
-  writable: () => IPC.postMessage({ type: "whiteboard.writable", value: window.app.room.isWritable }),
+  writable: () =>
+    IPC.postMessage({
+      type: "whiteboard.writable",
+      value: window.app.room.isWritable,
+    }),
+
+  // Get whiteboard members state.
+  members: () =>
+    IPC.postMessage({
+      type: "whiteboard.members",
+      value: window.app.room.state.roomMembers.map(transform_member_state),
+    }),
+
+  // Get whiteboard meta data -- sessionUID, uid, userPayload, roomUUID.
+  meta: () =>
+    IPC.postMessage({
+      type: "whiteboard.meta",
+      value: get_meta(),
+    }),
 };
 
 function is_string(v) {
