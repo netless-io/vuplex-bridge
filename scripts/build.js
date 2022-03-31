@@ -1,5 +1,6 @@
 import { readFile, copyFile } from "fs/promises";
-import esbuild, { Plugin } from "esbuild";
+import cp from "child_process";
+import esbuild from "esbuild";
 import babel from "@babel/core";
 import { dependencies } from "../package.json";
 import { relative } from "path";
@@ -27,7 +28,7 @@ const config = await babel.loadPartialConfigAsync({
   },
 });
 
-const babel_plugin: Plugin = {
+const babel_plugin = {
   name: "babel",
   setup({ onLoad, esbuild }) {
     onLoad({ filter: /\.ts$/ }, async args => {
@@ -45,16 +46,19 @@ const babel_plugin: Plugin = {
 
 try {
   await esbuild.build({
-    entryPoints: ["./src/main.ts"],
+    entryPoints: ["./src/main"],
     bundle: true,
     outdir: "dist",
     target: "chrome81",
     sourcemap: true,
     minify: true,
     plugins: [babel_plugin],
+    legalComments: "external",
     logLevel: "info",
   });
   await copyFile("./src/index.html", "./dist/index.html");
+  cp.spawnSync("ruby scripts/cs.rb", { stdio: "inherit", shell: true });
+  await copyFile("./cs/Whiteboard.cs", "./dist/Whiteboard.cs");
 } catch {
   process.exit(1);
 }

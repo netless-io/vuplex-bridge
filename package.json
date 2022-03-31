@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "",
   "private": true,
+  "type": "module",
   "repository": "netless-io/vuplex-bridge",
   "keywords": [
     "vuplex",
@@ -12,7 +13,7 @@
   ],
   "license": "MIT",
   "scripts": {
-    "build": "esbuild-dev scripts/build.ts",
+    "build": "esbuild-dev scripts/build.js",
     "cs": "ruby scripts/cs.rb"
   },
   "dependencies": {
