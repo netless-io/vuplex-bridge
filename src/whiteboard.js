@@ -3,10 +3,6 @@ import { createFastboard, mount } from "@netless/fastboard";
 window.app = null;
 window.ui = null;
 
-function to_json(obj) {
-  return JSON.parse(JSON.stringify(obj));
-}
-
 var transform_member_state = ({ memberId, payload }) => ({
   sessionUID: memberId,
   uid: payload?.uid || "",

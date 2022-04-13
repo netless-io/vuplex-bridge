@@ -46,7 +46,7 @@ const babel_plugin = {
 
 try {
   await esbuild.build({
-    entryPoints: ["./src/main"],
+    entryPoints: ["./src/whiteboard"],
     bundle: true,
     outdir: "dist",
     target: "chrome81",

@@ -1,5 +1,5 @@
 {
   "editor.formatOnSave": true,
-  "cSpell.words": ["fastboard", "vuplex"],
+  "cSpell.words": ["fastboard", "papeloto", "softprops", "vuplex"],
   "prettier.printWidth": 120
 }
