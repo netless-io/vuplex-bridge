@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "",
   "private": true,
+  "type": "module",
   "repository": "netless-io/vuplex-bridge",
   "keywords": [
     "vuplex",
@@ -12,19 +13,20 @@
   ],
   "license": "MIT",
   "scripts": {
-    "build": "esbuild-dev scripts/build.ts"
+    "build": "esbuild-dev scripts/build.js",
+    "cs": "ruby scripts/cs.rb"
   },
   "dependencies": {
-    "@netless/fastboard": "0.3.2-canary.1",
-    "@netless/window-manager": "^0.4.18",
+    "@netless/fastboard": "0.3.2-canary.6",
+    "@netless/window-manager": "^0.4.21",
     "core-js": "^3.21.1",
-    "white-web-sdk": "^2.16.10"
+    "white-web-sdk": "^2.16.15"
   },
   "devDependencies": {
-    "@babel/core": "^7.17.8",
+    "@babel/core": "^7.17.9",
     "@babel/preset-env": "^7.16.11",
     "@hyrious/esbuild-dev": "^0.7.5",
     "@types/babel__core": "^7.1.19",
-    "esbuild": "^0.14.28"
+    "esbuild": "^0.14.36"
   }
 }
