@@ -191,7 +191,7 @@ namespace Whiteboard {
         /// <summary>
         /// Load streaming-assets://index.html with room info.
         /// </summary>
-        public async void JoinRoom(string appIdentifier, string region, string uid, string uuid, string roomToken) {
+        public async Task JoinRoom(string appIdentifier, string region, string uid, string uuid, string roomToken) {
             await webViewPrefab.WaitUntilInitialized();
 
             readySource = new TaskCompletionSource<bool>();
