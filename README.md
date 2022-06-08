@@ -53,7 +53,7 @@ This project offers a C# interface to control a webpage-based whiteboard via the
 
 ```csharp
 class Whiteboard {
-    public async void JoinRoom(string appIdentifier, string region, string uid, string uuid, string roomToken);
+    public async Task JoinRoom(string appIdentifier, string region, string uid, string uuid, string roomToken);
     public Task<bool> GetWritable();
     public Task<WhiteboardMeta> GetMeta();
     public Task<WhiteboardMember[]> GetMembers();
