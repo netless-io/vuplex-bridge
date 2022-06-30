@@ -1,4 +1,4 @@
-import { createFastboard, mount } from "@netless/fastboard";
+import { createFastboard, createUI } from "@netless/fastboard";
 
 window.app = null;
 window.ui = null;
@@ -117,7 +117,7 @@ async function main() {
     },
   });
   window.app = app;
-  window.ui = mount(app, document.querySelector("#whiteboard"));
+  window.ui = createUI(app, document.querySelector("#whiteboard"));
   METHODS.ready();
   IPC.addEventListener("message", event => {
     const data = event.data;
