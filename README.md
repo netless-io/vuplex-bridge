@@ -2,6 +2,8 @@
 
 This project offers a C# interface to control a webpage-based whiteboard via the [vuplex](https://developer.vuplex.com/webview/overview) plugin.
 
+https://user-images.githubusercontent.com/6882794/199195475-625d633f-2682-437e-8f1e-bd7d71e2edee.mp4
+
 ## Quick Start
 
 ### Copy Whiteboard Source Files
