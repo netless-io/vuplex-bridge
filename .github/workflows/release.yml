@@ -8,25 +8,29 @@ jobs:
   build:
     runs-on: ubuntu-latest
     concurrency:
-      group: ci-${{ github.ref }}
+      group: ${{ github.workflow }}-${{ github.ref }}
       cancel-in-progress: true
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/cache@v2
-        with:
-          path: ~/.pnpm-store
-          key: ${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-
-      - uses: pnpm/action-setup@v2.0.1
+      - uses: actions/checkout@v3
+
+      - uses: pnpm/action-setup@v2.2.4
         with:
           version: latest
-          run_install: true
-      - run: pnpm build
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: "pnpm"
+
+      - run: |
+          pnpm install
+          pnpm run build
+
       - uses: papeloto/action-zip@v1
         with:
           files: dist
           dest: dist.zip
+
       - uses: softprops/action-gh-release@v1
         with:
           files: dist.zip

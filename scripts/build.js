@@ -57,7 +57,7 @@ try {
     logLevel: "info",
   });
   await copyFile("./src/index.html", "./dist/index.html");
-  cp.spawnSync("ruby scripts/cs.rb", { stdio: "inherit", shell: true });
+  // cp.spawnSync("ruby scripts/cs.rb", { stdio: "inherit", shell: true });
   await copyFile("./cs/Whiteboard.cs", "./dist/Whiteboard.cs");
 } catch {
   process.exit(1);
