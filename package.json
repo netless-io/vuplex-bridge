@@ -17,16 +17,17 @@
     "cs": "ruby scripts/cs.rb"
   },
   "dependencies": {
-    "@netless/fastboard": "0.3.4",
-    "@netless/window-manager": "^0.4.34",
-    "core-js": "^3.23.3",
-    "white-web-sdk": "^2.16.25"
+    "@netless/fastboard": "0.3.7",
+    "@netless/window-manager": "^0.4.55",
+    "core-js": "^3.30.0",
+    "white-web-sdk": "^2.16.41"
   },
   "devDependencies": {
-    "@babel/core": "^7.18.6",
-    "@babel/preset-env": "^7.18.6",
-    "@hyrious/esbuild-dev": "^0.7.7",
-    "@types/babel__core": "^7.1.19",
-    "esbuild": "^0.14.47"
+    "@babel/core": "^7.21.4",
+    "@babel/preset-env": "^7.21.4",
+    "@hyrious/esbuild-dev": "^0.10.2",
+    "@types/babel__core": "^7.20.0",
+    "esbuild": "^0.17.15",
+    "jspdf": "^2.5.1"
   }
 }
